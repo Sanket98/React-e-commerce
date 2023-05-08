@@ -60,7 +60,7 @@ function Cart() {
                                         <td>
                                             <Form className='d-flex align-items-center w-100 justify-content-center'>
                                                 <Button className='rounded-0 bg-white text-dark border-0' onClick={() => increaseCartItem(item.id)}>+</Button>
-                                                <h4>{cartItems}</h4>
+                                                <h4>{item.quantity}</h4>
                                                 <Button className='rounded-0 bg-white text-dark border-0' onClick={() => decreaseCartItem(item.id)}>-</Button>
                                             </Form>
                                         </td>

@@ -1,27 +1,33 @@
 import React, { useState } from 'react'
-import { Breadcrumb, Button, Container, Form, FormLabel, Table } from 'react-bootstrap'
+import { Breadcrumb, Button, Container, Form, FormLabel } from 'react-bootstrap'
+import Table from 'react-bootstrap/Table'
 import { Link } from 'react-router-dom'
 import Header from './Header'
 import Footer from './Footer'
 
 function Cart1() {
-    const [add, setAdd] = useState([]);
 
-    const addItem = (id, operation) => {
-      let  json = { id : id, add : add + 1 }
-			add.push(json)
-        
-            if (operation === "add") {
-                add.id = add.id + 1
-            } else if(operation === "subtract"){
-                add.id = add.id - 1
+    const initial_data = [
+        { "id": 1, "name": "T-Shirt", "price": 360, "quantity": 1 },
+        { "id": 2, "name": "Trousers", "price": 520, "quantity": 1 },
+        { "id": 3, "name": "Jackets", "price": 650, "quantity": 1 },
+    ];
+    const [data, setData] = useState(initial_data);
 
+    const increment = (id) => {
+        const updatedData = data.map((item) =>
+            item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+        );
+        setData(updatedData);
+    }
 
-            }else {
-                add.id = 1
-            }
-        }
-    
+    const decrement = (id) => {
+        const updatedData = data.map((item) =>
+            item.id === id ? { ...item, quantity: item.quantity - 1 } : item
+        );
+        setData(updatedData);
+    }
+
     return (
         <>
             <Header />
@@ -37,48 +43,34 @@ function Cart1() {
                     </Breadcrumb>
                 </div>
                 <Container>
-                    <Table className='mt-5 '>
+                    <Table className='mt-5'>
                         <thead>
                             <tr>
-
+                                <th>id</th>
                                 <th colSpan={2}>Product</th>
                                 <th>Price	</th>
                                 <th>Quantity</th>
                                 <th>Total</th>
-                                <th>id</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td className='d-none'>1</td>
-                                <td colSpan={2}>Minimalistic shop for multipurpose use</td>
-                                <td>$360.00</td>
-                                <td >
-                                    <Form className='d-flex align-items-center w-100 justify-content-center'>
-                                        <Button className='rounded-0 bg-white text-dark border-0' onClick={() => setAdd(add + 1)}>+</Button>
-                                        <h4>{add}</h4>
-                                        <Button className='rounded-0 bg-white text-dark border-0' onClick={() => setAdd(add - 1)}>-</Button>
-                                    </Form>
-
-                                </td>
-                                <td>$720.00</td>
-                            </tr>
-
-                            {/* <tr >
-                                <td className='d-none'>2</td>
-                                <td colSpan={2}>Minimalistic shop for multipurpose use</td>
-                                <td>$360.00</td>
-                                <td> 
-                                <Form className='d-flex align-items-center w-100 justify-content-center'>
-                                        <Button className='rounded-0 bg-white text-dark border-0' onClick={() => setAdd(add+1)}>+</Button>
-                                        <h4>{add}</h4>
-                                        <Button className='rounded-0 bg-white text-dark border-0'  onClick={()=>setAdd(add-1)}>-</Button>
-                                    </Form></td>
-                                <td>$720.00</td>
-                            </tr> */}
-
+                            {data.map(item => (
+                                <tr key={item.id}>
+                                    <td>{item.id}</td>
+                                    <td colSpan={2}>{item.name}</td>
+                                    <td>${item.price}</td>
+                                    <td>
+                                        <Form className='d-flex align-items-center w-100 justify-content-center'>
+                                            <Button className='rounded-0 bg-white text-dark border-0 disabled:bg-gray' disabled={item.quantity === 1} onClick={() => decrement(item.id)}><span> - </span></Button>
+                                            <span className='px-2'>{item.quantity}</span>
+                                            <Button className='rounded-0 bg-white text-dark border-0 disabled:bg-gray' disabled={item.quantity === 10} onClick={() => increment(item.id)}><span> + </span></Button>
+                                        </Form>
+                                    </td>
+                                    <td>${item.price * item.quantity}</td>
+                                </tr>
+                            ))
+                            }
                         </tbody>
-
                     </Table>
                     <Link to="" className='red_circle_btn '>
                         Update cart
