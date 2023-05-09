@@ -8,11 +8,12 @@ import Footer from './Footer'
 function Cart1() {
 
     const initial_data = [
-        { "id": 1, "name": "T-Shirt", "price": 360, "quantity": 1 },
-        { "id": 2, "name": "Trousers", "price": 520, "quantity": 1 },
-        { "id": 3, "name": "Jackets", "price": 650, "quantity": 1 },
+        { "id": 1, "name": "T-Shirt", "price": 360, "quantity": 0 },
+        { "id": 2, "name": "Trousers", "price": 520, "quantity": 0 },
+        { "id": 3, "name": "Jackets", "price": 650, "quantity": 0 },
     ];
     const [data, setData] = useState(initial_data);
+    const [total, setTotal] = useState(0)
 
     const increment = (id) => {
         const updatedData = data.map((item) =>
@@ -27,7 +28,10 @@ function Cart1() {
         );
         setData(updatedData);
     }
-
+    const totalItem = (price, type) => {
+        debugger
+        (type === "add") ? setTotal(total + price) : setTotal(total - price)
+    }
     return (
         <>
             <Header />
@@ -61,9 +65,9 @@ function Cart1() {
                                     <td>${item.price}</td>
                                     <td>
                                         <Form className='d-flex align-items-center w-100 justify-content-center'>
-                                            <Button className='rounded-0 bg-white text-dark border-0 disabled:bg-gray' disabled={item.quantity === 1} onClick={() => decrement(item.id)}><span> - </span></Button>
+                                            <Button className='rounded-0 bg-white text-dark border-0 disabled:bg-gray' disabled={item.quantity === 0} onClick={() => { decrement(item.id); totalItem(item.price, "subtract") }}><span> - </span></Button>
                                             <span className='px-2'>{item.quantity}</span>
-                                            <Button className='rounded-0 bg-white text-dark border-0 disabled:bg-gray' disabled={item.quantity === 10} onClick={() => increment(item.id)}><span> + </span></Button>
+                                            <Button className='rounded-0 bg-white text-dark border-0 disabled:bg-gray' disabled={item.quantity === 10} onClick={() => { increment(item.id); totalItem(item.price, "add") }}><span> + </span></Button>
                                         </Form>
                                     </td>
                                     <td>${item.price * item.quantity}</td>
@@ -78,7 +82,7 @@ function Cart1() {
                     <Table>
                         <tr className="">
                             <td>SubTotal</td>
-                            <td>$2160.00
+                            <td>{total}
                             </td>
                         </tr>
                         <tr className="">
